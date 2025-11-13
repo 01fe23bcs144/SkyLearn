@@ -18,4 +18,17 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import os
+    import django
+    from django.core.management import execute_from_command_line
+
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    django.setup()
+
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@example.com", "admin123")
+
+    execute_from_command_line(sys.argv)
+
