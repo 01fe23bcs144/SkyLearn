@@ -176,6 +176,7 @@ STATICFILES_DIRS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
