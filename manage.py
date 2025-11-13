@@ -3,6 +3,7 @@
 import os
 import sys
 
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -10,13 +11,29 @@ def main():
         from django.core.management import execute_from_command_line
     except ImportError as exc:
         raise ImportError(
-            "Couldn't import Django. Make sure it's installed and "
-            "available on your PYTHONPATH environment variable. "
-            "Did you forget to activate a virtual environment?"
+            "Couldn't import Django. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
         ) from exc
-
     execute_from_command_line(sys.argv)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
+
+    # 🔹 Auto-create superuser during first deployment
+    try:
+        from django.contrib.auth import get_user_model
+        from django.db import OperationalError
+        User = get_user_model()
+        if not User.objects.filter(username="admin").exists():
+            User.objects.create_superuser(
+                username="admin",
+                email="admin@example.com",
+                password="admin123"
+            )
+            print("✅ Superuser 'admin' created successfully (username: admin, password: admin123)")
+        else:
+            print("ℹ️ Superuser 'admin' already exists.")
+    except OperationalError:
+        print("⚠️ Database not ready yet — skipping superuser creation.")
